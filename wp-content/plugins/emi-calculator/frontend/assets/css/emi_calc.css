@@ -1,0 +1,247 @@
+.emi_calculator_info {
+    max-width: 66.66% !important;
+    max-width: 800px !important;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 10px 0 rgba(0,0,0,.2);
+    box-shadow: 0 0 5px 0 rgba(0,0,0,.2);
+}
+
+
+.emi_error_msg {
+    color: red;
+}
+.heading{
+    text-align: center; 
+    padding-bottom: 30px;
+}
+.emi_calculator_info input[type="number"] {
+    padding: 8px;
+    border-radius: 3px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    outline: none;
+}
+.emi_calculator_info label {
+    font-size: 18px !important;
+    font-weight: 600;
+    color: #000;
+}
+.emi_calculator_result h6 {
+    margin: 0px !important;
+}
+.emi_calculator_col {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: #ccc;
+}
+.emi_calculator_col2 {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    border: 1px solid;
+    border-color: #ccc;
+    margin-top: 20px;
+}
+label.form-label.form-label2 {
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+}
+.emi_calculator_result table {
+    background: #ffff;
+}
+div#emi_range {
+    margin-top: 15px;
+    margin-bottom: 35px;
+}
+#emi_range .rangeslider--horizontal {
+    height: 6px;
+}
+#emi_range .rangeslider__fill {
+    background: #2680eb; 
+}
+#emi_range .rangeslider__handle {
+    width: 25px;
+    height: 25px;
+    border: none;
+    background: #2680eb;
+}
+#emi_range .rangeslider__handle:after {
+    content: none;
+}
+.emi_align_center {
+    text-align: center;
+    border-bottom: 2px dashed #ccc;
+}
+.emi_align_center p {
+    margin-bottom: 1em;
+}
+#emi_payment_summary h4 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #666;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+#emi_payment_summary span {
+    font-size: 18px;
+    font-weight: 700;
+}
+.emi_calculator_result {
+    display: flex;
+    align-items: center;
+}
+div#emi_payment_summary {
+    padding-right: 10px;
+}
+#emi_payment_summary, #emi_chart_summery {
+    flex: 0 0 50%;
+    max-width: 50%;
+}
+.emi_loan_field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.emi_control_label {
+    display: block;
+    text-align: right;
+    margin-bottom: 0;
+    flex: 0 0 33.3333333333%;
+    max-width: 33.3333333333%;
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.emi_form_group {
+    flex: 0 0 50%;
+    max-width: 50%;
+    position: relative;
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+}
+.emi_input_group {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
+}
+input.form-control {
+    display: block;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid !important; 
+    border-color: #ced4da;
+    border-radius: 0.25rem;
+}
+.emi_input_group>.form-control {
+    position: relative;
+    flex: 1 1 auto;
+    width: 1%;
+    margin-bottom: 0;
+    margin-right: 0;
+}
+.emi_input_group_symbol {
+    display: flex;
+    margin-left: -1px;
+}
+.emi_input_group_symbol span {
+    display: flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    margin-bottom: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #495057;
+    text-align: center;
+    white-space: nowrap;
+    background-color: #e9ecef;
+    border: 1px solid;
+    border-color: #a9a6a9;
+    border-radius: 0.25rem;
+    border-radius: 0rem 0.25rem 0.25rem 0rem;
+}
+.tenure-choice {
+    display: flex;
+    align-items: stretch;
+    flex-wrap: wrap;
+}
+.emi-tenure-radio {
+    position: relative;
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+}
+input#years, input#months {
+    margin: 0;
+    padding: 0;
+    visibility: hidden;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+.emi-tenure-radio input[type=radio]:not(old):checked+.form-label {
+    background-color: #cbd3da;
+    border-color: #adadad;
+}
+.emi-tenure-radio input[type=radio]:not(old)+.form-label {
+    text-align: center;
+    font-weight: 400;
+    border: 1px solid;
+    border-color: #d3d3d3;
+    border-left-width: 0px;
+    padding: 0.375rem 0.75rem;
+    margin: 0;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    color: #000;
+}
+
+/*.month_emi {
+    display: none;
+}*/
+/*.emi_month_detail {
+    display: none;
+}
+.emi_year_detail {
+    display: none;
+}*/
+
+@media only screen and (max-width: 768px) {
+    .emi_control_label {
+        flex: 0 0 100%; 
+        max-width: 100%; 
+        padding-right: 0px;
+        padding-left: 0px;
+        text-align: left;
+    }
+    .emi_form_group {
+        flex: 0 0 100%; 
+        max-width: 100%; 
+        padding-right: 0px;
+        padding-left: 0px;
+    }
+    .emi_calculator_result {
+        flex-wrap: wrap;
+    }
+	#emi_payment_summary, #emi_chart_summery {
+        flex: 0 0 100%; 
+        max-width: 100%; 
+    }
+    div#emi_payment_summary {
+        padding-bottom: 10px;
+    }
+}
