@@ -1,0 +1,5 @@
+.emi-calculator { max-width: 720px; padding: 15px; border: 1px solid #eee; background: #fff; }
+.emi-calculator .field { margin-bottom: 12px; }
+.emi-calculator label { display: block; font-weight: 600; margin-bottom: 4px; }
+.emi-calculator input[type="text"], .emi-calculator input[type="email"], .emi-calculator select { width: 100%; padding: 8px; box-sizing: border-box; }
+#emi-results p { margin: 6px 0; }

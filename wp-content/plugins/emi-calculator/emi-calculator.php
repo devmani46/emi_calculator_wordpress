@@ -1,53 +1,86 @@
 <?php
 /**
-* Plugin Name: EMI Calculator
-* Description: This plugin allows you to Create EMI Calculator.
-* Version: 1.1
-* Copyright: 2023
-* Text Domain: emi-calculator
-* License: GPLv3 or later
-*/
+ * Plugin Name: EMI Calculator & Application Manager
+ * Description: EMI calculation + application submission, document upload, SMS confirmation, and admin CRM interface.
+ * Version: 1.0.0
+ * Text Domain: emi-calculator
+ * Author: Your Name
+ */
 
-// Include function files
-include_once('backend/backend.php');
-include_once('frontend/frontend.php');
-include_once('default.php');
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-add_action( 'wp_enqueue_scripts', 'EMI_calculator_loadScriptStyle' );
+define( 'EMI_PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
+define( 'EMI_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
-function EMI_calculator_loadScriptStyle() {
-    // Get file modification times for versioning (cache busting)
-    $emi_calc_js_version = filemtime( plugin_dir_path( __FILE__ ) . 'frontend/assets/js/emi_calc.js' );
-    $rangeslider_js_version = filemtime( plugin_dir_path( __FILE__ ) . 'frontend/assets/js/rangeSlider.min.js' );
-    $chart_js_version = filemtime( plugin_dir_path( __FILE__ ) . 'frontend/assets/js/chart.js' );
-    $emi_calc_css_version = filemtime( plugin_dir_path( __FILE__ ) . 'frontend/assets/css/emi_calc.css' );
-    $rangeslider_css_version = filemtime( plugin_dir_path( __FILE__ ) . 'frontend/assets/css/rangeslider.min.css' );
+// Includes
+require_once EMI_PLUGIN_DIR . 'includes/cpt-register.php';
+require_once EMI_PLUGIN_DIR . 'includes/settings-page.php';
+require_once EMI_PLUGIN_DIR . 'includes/admin-menu.php';
+require_once EMI_PLUGIN_DIR . 'includes/form-handler.php';
+require_once EMI_PLUGIN_DIR . 'includes/sms-notification.php';
 
-    // Enqueue scripts and styles with versioning
-    wp_enqueue_script( 'jquery-emi-calculator', plugins_url( 'frontend/assets/js/emi_calc.js', __FILE__ ), array('jquery'), $emi_calc_js_version, true );
-    wp_enqueue_style( 'emi_calc_css', plugins_url( 'frontend/assets/css/emi_calc.css', __FILE__ ), false, $emi_calc_css_version );
-    wp_enqueue_script( 'rangeslider-min-js', plugins_url( 'frontend/assets/js/rangeSlider.min.js', __FILE__ ), array('jquery'), $rangeslider_js_version, true );
-    wp_enqueue_style( 'rangeslider-css', plugins_url( 'frontend/assets/css/rangeslider.min.css', __FILE__ ), false, $rangeslider_css_version );
-    wp_enqueue_script( 'jquery-calculator-chart', plugins_url( 'frontend/assets/js/chart.js', __FILE__ ), array('jquery'), $chart_js_version, true );
+// Activation / Deactivation hooks
+register_activation_hook( __FILE__, 'emi_plugin_activate' );
+register_deactivation_hook( __FILE__, 'emi_plugin_deactivate' );
 
-    // Localized variables to be used in the JavaScript
-    $emi_color_var = array(
-         'emi_title' => emi_get_setting('emi_title'),
-        'emi_principal_chart_color' => emi_get_setting('emi_principal_amount_color'),
-        'emi_intereset_chart_color' => emi_get_setting('emi_intereset_amount_color'),
-        'emi_calc_chart_type' =>emi_get_setting('emi_chart_type'),
-        'emi_calc_with_chart' => emi_get_setting('emi_enable_chart'),
-        'emi_principal_chart_text' => emi_get_setting('principal_amou_text'),
-        'emi_interest_chart_text' => emi_get_setting('interest_amou_text'),
-        'emi_min_loan_amount' => emi_get_setting('min_loan_amount'),
-        'emi_max_loan_amount' => emi_get_setting('max_loan_amount'),
-        'emi_min_interest_rate' => emi_get_setting('min_interest_rate'),
-        'emi_max_interest_rate' => emi_get_setting('max_interest_rate'),
-        'yearly_min_loan_term' => emi_get_setting('min_year_loan_term'),
-        'yearly_max_loan_term' => emi_get_setting('max_year_loan_term'),
-        'monthly_min_loan_term' => emi_get_setting('min_month_loan_term'),
-        'monthly_max_loan_term' => emi_get_setting('max_month_loan_term'),
-    );
+function emi_plugin_activate() {
+    // Create custom role for CRM with specific capabilities (if not exists)
+    add_role( 'emi_crm', 'EMI CRM', array(
+        'read' => true,
+        'edit_emi_applications' => true,
+        'publish_emi_applications' => true,
+        'manage_emi_settings' => true,
+        'read_private_emi_applications' => true,
+    ) );
 
-    wp_localize_script( 'jquery-emi-calculator', 'emi_calc_style', $emi_color_var );
+    // Add capabilities to administrator role
+    $roles = array( 'administrator' );
+    foreach ( $roles as $r ) {
+        $role = get_role( $r );
+        if ( $role ) {
+            $role->add_cap( 'edit_emi_applications' );
+            $role->add_cap( 'read_emi_applications' );
+            $role->add_cap( 'delete_emi_applications' );
+            $role->add_cap( 'manage_emi_settings' );
+        }
+    }
+
+    // Ensure CPT/taxonomy registered and rewrite flushed
+    emi_register_cpt_and_tax();
+    flush_rewrite_rules();
+}
+
+function emi_plugin_deactivate() {
+    // remove capabilities if you want (commented out to avoid accidental loss)
+    // flush rewrite rules
+    flush_rewrite_rules();
+}
+
+// Register scripts and shortcode
+add_action( 'wp_enqueue_scripts', 'emi_enqueue_frontend_assets' );
+add_action( 'admin_enqueue_scripts', 'emi_enqueue_admin_assets' );
+
+function emi_enqueue_frontend_assets() {
+    wp_enqueue_style( 'emi-style', EMI_PLUGIN_URL . 'assets/css/emi-style.css' );
+    wp_enqueue_script( 'emi-scripts', EMI_PLUGIN_URL . 'assets/js/emi-scripts.js', array('jquery'), null, true );
+
+    wp_localize_script( 'emi-scripts', 'emi_ajax', array(
+        'ajax_url' => admin_url( 'admin-ajax.php' ),
+        'nonce'    => wp_create_nonce( 'emi_frontend_nonce' ),
+    ) );
+}
+
+function emi_enqueue_admin_assets( $hook ) {
+    // Only enqueue when relevant admin pages are loaded or for our plugin pages
+    wp_enqueue_style( 'emi-admin-style', EMI_PLUGIN_URL . 'assets/css/emi-style.css' );
+}
+
+// Shortcode
+add_shortcode( 'emi_calculator_form', 'emi_render_shortcode' );
+function emi_render_shortcode( $atts ) {
+    ob_start();
+    include EMI_PLUGIN_DIR . 'templates/emi-form.php';
+    return ob_get_clean();
 }
