@@ -466,7 +466,31 @@ function emi_admin_applications_page() {
                 ?>
                 <tr>
                     <td><?php echo esc_html( $app->ID ); ?></td>
-                    <td><?php echo esc_html( $meta['emi_customer_name'][0] ?? '' ); ?></td>
+                    <td>
+                        <strong>
+                            <a href="<?php echo esc_url( add_query_arg( 'action', 'view', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>">
+                                <?php echo esc_html( $meta['emi_customer_name'][0] ?? '' ); ?>
+                            </a>
+                        </strong>
+                        <br/>
+                        <div class="row-actions">
+                            <span class="edit">
+                                <a href="<?php echo esc_url( add_query_arg( 'action', 'edit', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>">
+                                    <?php _e( 'Edit', 'emi-calculator' ); ?>
+                                </a> | 
+                            </span>
+                            <span class="quick-edit">
+                                <a href="<?php echo esc_url( add_query_arg( 'action', 'quick_edit', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>">
+                                    <?php _e( 'Quick Edit', 'emi-calculator' ); ?>
+                                </a> | 
+                            </span>
+                            <span class="delete">
+                                <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'action', 'delete', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ), 'emi_delete_application_nonce' ) ); ?>" onclick="return confirm('<?php _e( 'Are you sure you want to delete this application?', 'emi-calculator' ); ?>');">
+                                    <?php _e( 'Delete', 'emi-calculator' ); ?>
+                                </a>
+                            </span>
+                        </div>
+                    </td>
                     <td><?php echo esc_html( $meta['emi_phone'][0] ?? '' ) . '<br/>' . esc_html( $meta['emi_email'][0] ?? '' ); ?></td>
                     <td><?php echo esc_html( $bike_label ); ?></td>
                     <td><?php echo esc_html( $meta['emi_monthly_emi'][0] ?? '' ); ?></td>
@@ -488,18 +512,9 @@ function emi_admin_applications_page() {
                     </td>
                     <td><?php echo esc_html( get_the_date( '', $app ) ); ?></td>
                     <td>
-                        <a href="<?php echo esc_url( add_query_arg( 'action', 'edit', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>" class="button button-small button-primary">
-                            <?php _e( 'Edit', 'emi-calculator' ); ?>
-                        </a>
-                        <a href="<?php echo esc_url( add_query_arg( 'action', 'quick_edit', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>" class="button button-small">
-                            <?php _e( 'Quick Edit', 'emi-calculator' ); ?>
-                        </a>
-                        <a href="<?php echo esc_url( add_query_arg( 'action', 'view', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>" class="button button-small">
+                        <strong><a href="<?php echo esc_url( add_query_arg( 'action', 'view', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ) ); ?>">
                             <?php _e( 'View', 'emi-calculator' ); ?>
-                        </a>
-                        <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'action', 'delete', add_query_arg( 'app_id', $app->ID, admin_url( 'admin.php?page=emi-applications' ) ) ), 'emi_delete_application_nonce' ) ); ?>" class="button button-small button-secondary" onclick="return confirm('<?php _e( 'Are you sure you want to delete this application?', 'emi-calculator' ); ?>');">
-                            <?php _e( 'Delete', 'emi-calculator' ); ?>
-                        </a>
+                        </a></strong>
                     </td>
                 </tr>
                 <?php endforeach; ?>
