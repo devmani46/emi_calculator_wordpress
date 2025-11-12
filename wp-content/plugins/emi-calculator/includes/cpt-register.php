@@ -134,6 +134,62 @@ function emi_save_bike_model_meta( $term_id ) {
 
 /**
  * --------------------------
+ * Add Meta Box: Application Status (for CRM/Admin)
+ * --------------------------
+ */
+add_action( 'add_meta_boxes', 'emi_add_status_meta_box' );
+function emi_add_status_meta_box() {
+    add_meta_box(
+        'emi_application_status',
+        __( 'Application Status', 'emi-calculator' ),
+        'emi_render_status_meta_box',
+        'emi_applications',
+        'side',
+        'default'
+    );
+}
+
+function emi_render_status_meta_box( $post ) {
+    $status = get_post_meta( $post->ID, '_emi_status', true );
+    $current_user = wp_get_current_user();
+
+    // Allow only admin or CRM to edit
+    $can_edit = in_array( 'administrator', $current_user->roles ) || in_array( 'emi_crm', $current_user->roles );
+
+    ?>
+    <label for="emi_status"><strong><?php _e( 'Current Status:', 'emi-calculator' ); ?></strong></label><br>
+    <?php if ( $can_edit ) : ?>
+        <select name="emi_status" id="emi_status">
+            <option value="Under Review" <?php selected( $status, 'Under Review' ); ?>>Under Review</option>
+            <option value="Approved" <?php selected( $status, 'Approved' ); ?>>Approved</option>
+            <option value="Rejected" <?php selected( $status, 'Rejected' ); ?>>Rejected</option>
+        </select>
+    <?php else : ?>
+        <p><?php echo esc_html( $status ? $status : 'Under Review' ); ?></p>
+        <input type="hidden" name="emi_status" value="<?php echo esc_attr( $status ); ?>">
+    <?php endif; ?>
+    <?php
+    wp_nonce_field( 'emi_save_status_nonce', 'emi_status_nonce' );
+}
+
+add_action( 'save_post_emi_applications', 'emi_save_status_meta' );
+function emi_save_status_meta( $post_id ) {
+    if ( ! isset( $_POST['emi_status_nonce'] ) || ! wp_verify_nonce( $_POST['emi_status_nonce'], 'emi_save_status_nonce' ) ) {
+        return;
+    }
+
+    $current_user = wp_get_current_user();
+    $can_edit = in_array( 'administrator', $current_user->roles ) || in_array( 'emi_crm', $current_user->roles );
+
+    if ( ! $can_edit ) return;
+
+    if ( isset( $_POST['emi_status'] ) ) {
+        update_post_meta( $post_id, '_emi_status', sanitize_text_field( $_POST['emi_status'] ) );
+    }
+}
+
+/**
+ * --------------------------
  * Ensure Bike Models appear in main admin menu (top-level)
  * --------------------------
  */
@@ -142,7 +198,6 @@ add_action( 'admin_menu', 'emi_force_show_bike_models_menu' );
 function emi_force_show_bike_models_menu() {
     global $submenu;
     if ( isset( $submenu['edit-tags.php?taxonomy=bike_models'] ) ) {
-        // Already visible, do nothing
         return;
     }
     add_menu_page(
