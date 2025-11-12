@@ -136,12 +136,6 @@ function emi_submit_ajax() {
     // Create .htaccess in upload dir to block direct access
     emi_create_htaccess();
 
-    // Send SMS to customer
-    $settings = get_option( 'emi_settings', array() );
-    $sms_template = $settings['sms_template'] ?? 'Thank you {name}. Your EMI application (ID: {id}) is received.';
-    $message = str_replace( array('{name}','{id}'), array( $name, $post_id ), $sms_template );
-    emi_send_sms( $phone, $message );
-
     wp_send_json_success( array(
         'message' => 'Application submitted successfully',
         'id' => $post_id

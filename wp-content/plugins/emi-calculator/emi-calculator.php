@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name: EMI Calculator & Application Manager
- * Description: EMI calculation + application submission, document upload, SMS confirmation, and admin CRM interface.
+ * Description: EMI calculation + application submission, document upload, and admin CRM interface.
  * Version: 1.0.0
  * Text Domain: emi-calculator
  * Author: Your Name
@@ -19,7 +19,6 @@ require_once EMI_PLUGIN_DIR . 'includes/cpt-register.php';
 require_once EMI_PLUGIN_DIR . 'includes/settings-page.php';
 require_once EMI_PLUGIN_DIR . 'includes/admin-menu.php';
 require_once EMI_PLUGIN_DIR . 'includes/form-handler.php';
-require_once EMI_PLUGIN_DIR . 'includes/sms-notification.php';
 
 // Activation / Deactivation hooks
 register_activation_hook( __FILE__, 'emi_plugin_activate' );
