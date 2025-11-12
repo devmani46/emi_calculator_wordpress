@@ -4,7 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 /**
  * AJAX endpoints:
  * - calculate EMI -> emi_calculate_ajax
- * - submit application -> emi_submit_ajax
+ * - submit application -> emi_submit_ajax  
  */
 
 add_action( 'wp_ajax_nopriv_emi_calculate', 'emi_calculate_ajax' );
