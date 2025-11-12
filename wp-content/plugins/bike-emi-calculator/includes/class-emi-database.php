@@ -153,9 +153,9 @@ class Bike_EMI_Database {
             // Insert default documents
             $default_docs = array(
                 array(
-                    'name' => 'Aadhar Card',
-                    'doc_type' => 'aadhar',
-                    'description' => 'Upload front and back side of Aadhar card',
+                    'name' => 'Citizen Card',
+                    'doc_type' => 'citizen_card',
+                    'description' => 'Upload front and back side of citizen card',
                     'allowed_formats' => '.pdf,.jpg,.jpeg,.png',
                     'is_required' => 1,
                     'display_order' => 1,
@@ -183,7 +183,7 @@ class Bike_EMI_Database {
                     'allowed_formats' => '.pdf,.jpg,.jpeg,.png',
                     'is_required' => 1,
                     'display_order' => 4,
-                ),
+                )
             );
             
             foreach ($default_docs as $doc) {
